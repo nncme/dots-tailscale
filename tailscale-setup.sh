@@ -178,7 +178,7 @@ preflight() {
   for c in python3 timeout flock openssl ssh-keygen /usr/sbin/sshd; do require "$c"; done
   local port_start
   port_start="$(cat /proc/sys/net/ipv4/ip_unprivileged_port_start)"
-  [[ "$port_start" -le 22 ]] || fail 'unprivileged port 22 unavailable'
+  [[ "$port_start" -le 2222 ]] || fail 'unprivileged port 2222 unavailable'
 }
 install_all() {
   local source_layout=source
@@ -275,7 +275,7 @@ STAGE_PAIR
     fi
   fi
   cat > "$tmp/sshd_config" <<CFG
-Port 22
+Port 2222
 ListenAddress 127.0.0.1
 HostKey $S/ssh_host_ed25519_key
 PidFile $R/sshd.pid
@@ -355,7 +355,7 @@ PY
   fi
   python3 - <<'PY'
 import socket
-with socket.create_connection(('127.0.0.1',22), timeout=5) as s:
+with socket.create_connection(('127.0.0.1',2222), timeout=5) as s:
     if not s.recv(256).startswith(b'SSH-'): raise SystemExit('invalid SSH banner')
 PY
 }
