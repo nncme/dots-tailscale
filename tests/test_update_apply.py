@@ -655,8 +655,9 @@ class ApplyTests(unittest.TestCase):
         connection = mock.MagicMock(); connection.__enter__.return_value.recv.return_value = b'SSH-2.0-fixture'
         with mock.patch.object(tool, 'apply_identity', side_effect=lambda pid: identities[pid]), \
              mock.patch.object(tool, 'apply_public_identity', side_effect=[tool.ApplyError('backend_not_running'), 'same']), \
-             mock.patch.object(tool.socket, 'create_connection', return_value=connection):
+             mock.patch.object(tool.socket, 'create_connection', return_value=connection) as connect:
             tool.apply_ready(self.directory, self.root, proxy, self.baseline, self.candidate, 'same', {}, b'public-key', timeout=1)
+            self.assertEqual(connect.call_args.args[0], ('127.0.0.1', 2222))
 
     def test_identity_change_not_retried_as_transient(self):
         with mock.patch.object(tool, 'apply_identity', return_value=None):

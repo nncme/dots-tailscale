@@ -905,7 +905,7 @@ def apply_components(directory, runtime, proxy):
     result['_socket'] = proxy._socket_identity(runtime)
     result['tailscaled'] = apply_identity(daemon['pid'])
     if not result['tailscaled']: raise ApplyError('daemon_exited')
-    for name, port in (('shim', 18089), ('sshd', 22)):
+    for name, port in (('shim', 18089), ('sshd', 2222)):
         if not proxy._listener_owned(result[name], port): raise ApplyError('listener_identity_unknown')
     return result
 
@@ -1022,7 +1022,7 @@ def apply_ready(directory, runtime, proxy, baseline, candidate, public, config, 
             if proxy.inspect_config(directory, runtime) != config: raise ApplyError('proxy_configuration_changed')
             if bounded_code_read(directory, 'sshd/ssh_host_ed25519_key.pub', 16384) != host_public: raise ApplyError('host_public_key_changed')
             if not proxy._listener_owned(candidate, 18089): raise ApplyError('shim_listener_not_ready')
-            with socket.create_connection(('127.0.0.1', 22), timeout=min(2, remaining())) as connection:
+            with socket.create_connection(('127.0.0.1', 2222), timeout=min(2, remaining())) as connection:
                 connection.settimeout(min(2, remaining()))
                 if not connection.recv(256).startswith(b'SSH-'): raise ApplyError('ssh_not_ready')
             remaining()

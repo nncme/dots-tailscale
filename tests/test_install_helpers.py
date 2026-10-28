@@ -69,6 +69,8 @@ class InstallHelpersTests(unittest.TestCase):
             self.assertEqual((self.d / n).stat().st_mode & 0o777, 0o700)
         self.assertIn('"$DOTS_TS_DIR/setup.sh"', (self.d / "start.sh").read_text())
         self.assertFalse((self.d / "outbound-proxy.json").exists())
+        self.assertIn("Port 2222\n", (self.d / "sshd/sshd_config").read_text())
+        self.assertIn("ListenAddress 127.0.0.1\n", (self.d / "sshd/sshd_config").read_text())
         self.assertEqual((self.d / "source-manifest.json").read_bytes(),
                          (self.source / "source-manifest.json").read_bytes())
         self.assert_identity_preserved()

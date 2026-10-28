@@ -1,3 +1,5 @@
+> **Owner fork patch:** This branch uses SSH on **2222**, not upstream port 22. See [scope, provenance, and validation](docs/fork-port2222.md). Upstream instructions below otherwise describe the original release; do not install its port-22 release over this modified bundle.
+
 <h1 align="center">dots-tailscale</h1>
 
 <p align="center"><a href="https://github.com/abruption/dots-tailscale/stargazers"><img src="https://img.shields.io/github/stars/abruption/dots-tailscale?style=flat&logo=github" alt="GitHub Stars"></a></p>
